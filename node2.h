@@ -214,26 +214,30 @@ namespace CISP430_A3
     {
     public:
     	node_iterator(node<Item>* initial = NULL)
-	    { current = initial; }
-	Item& operator *( ) const
-	    { return current->data( ); }
-	node_iterator& operator ++( ) // Prefix ++
 	    { 
-		current = current->link( );
-		return *this;
-	    }
-	node_iterator operator ++(int) // Postfix ++
-	    {
-		node_iterator original(current);
-		current = current->link( );
-		return original;      	  
-	    }
-	bool operator ==(const node_iterator other) const
-	    { return current == other.current; }
-	bool operator !=(const node_iterator other) const
-	    { return current != other.current; }
+			current = initial; 
+		}
+		Item& operator *( ) const
+		{
+				return current->data( ); 
+		}
+		node_iterator& operator ++( ) // Prefix ++
+			{ 
+			current = current->link( );
+			return *this;
+			}
+		node_iterator operator ++(int) // Postfix ++
+			{
+			node_iterator original(current);
+			current = current->link( );
+			return original;      	  
+			}
+		bool operator ==(const node_iterator other) const
+			{ return current == other.current; }
+		bool operator !=(const node_iterator other) const
+			{ return current != other.current; }
     private:
-	node<Item>* current;
+		node<Item>* current;
     };
 
     template <class Item>
@@ -243,25 +247,25 @@ namespace CISP430_A3
     public:
     	const_node_iterator(const node<Item>* initial = NULL)
 	    { current = initial; }
-	const Item& operator *( ) const
-	    { return current->data( ); }
-	const_node_iterator& operator ++( ) // Prefix ++
-	    {
-		current = current->link( );
-		return *this;
-	    }
-	const_node_iterator operator ++(int) // Postfix ++
-	    {
-		const_node_iterator original(current);
-		current = current->link( );
-		return original;
-	    }
-	bool operator ==(const const_node_iterator other) const
-	    { return current == other.current; }
-	bool operator !=(const const_node_iterator other) const
-	    { return current != other.current; }
-    private:
-	const node<Item>* current;
+		const Item& operator *( ) const
+			{ return current->data( ); }
+		const_node_iterator& operator ++( ) // Prefix ++
+		{
+			current = current->link( );
+			return *this;
+		}
+		const_node_iterator operator ++(int) // Postfix ++
+		{
+			const_node_iterator original(current);
+			current = current->link( );
+			return original;
+		}
+		bool operator ==(const const_node_iterator other) const
+			{ return current == other.current; }
+		bool operator !=(const const_node_iterator other) const
+			{ return current != other.current; }
+		private:
+		const node<Item>* current;
     };
 
 }
