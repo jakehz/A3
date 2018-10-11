@@ -85,7 +85,7 @@ namespace CISP430_A3
         // CONSTRUCTORS and DESTRUCTOR
         sequence( );
         sequence(const sequence& source);
-	~sequence( );
+		~sequence( );
         // MODIFICATION MEMBER FUNCTIONS
         void start( );
         void advance( );
@@ -102,6 +102,7 @@ namespace CISP430_A3
 	node<Item> *tail_ptr;
 	node<Item> *cursor;
 	node<Item> *precursor;
+	// the amount of nodes in the sequence.
 	size_type many_nodes;
     };
 }

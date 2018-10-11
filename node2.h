@@ -158,11 +158,15 @@ namespace CISP430_A3
             { data_field = init_data; link_field = init_link; }
         // MODIFICATION MEMBER FUNCTIONS
         Item& data( ) { return data_field; }
+		// link function for a node declared non-constant
+		// (returns a pointer that CAN be modified)
         node* link( ) { return link_field; }
         void set_data(const Item& new_data) { data_field = new_data; }
         void set_link(node* new_link) { link_field = new_link; }
         // CONST MEMBER FUNCTIONS
         const Item& data( ) const { return data_field; }
+		// link function for a constant node
+		// returns a link that CANNOT  be modified.
         const node* link( ) const { return link_field; }
     private:
         Item data_field;
@@ -170,6 +174,9 @@ namespace CISP430_A3
     };
 
     // FUNCTIONS to manipulate a linked list:
+	// these seem like general use functions for a linked list. generally they take 
+	// the beginning of the list (head_ptr) or a position you would like 
+	// to alter (previous_ptr)
     template <class Item>
     void list_clear(node<Item>*& head_ptr);
 
@@ -208,6 +215,9 @@ namespace CISP430_A3
     // Older compilers that do not support the std::iterator class can
     // delete everything after the word iterator in the second line:
 
+	// JAKE'S NOTE
+	// this would work just like iterating through an array with a pointer. 
+	// the right operators are overloaded and everything.
     template <class Item>
     class node_iterator
 	// : public std::iterator<std::forward_iterator_tag, Item>
@@ -240,6 +250,7 @@ namespace CISP430_A3
 		node<Item>* current;
     };
 
+	// exactly the same as above but for use with const nodes. (can't be altered)
     template <class Item>
     class const_node_iterator
 	// : public std::iterator<std::forward_iterator_tag, const Item>
