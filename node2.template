@@ -52,6 +52,8 @@ namespace CISP430_A3
     template <class Item>
     void list_head_insert(node<Item>*& head_ptr, const Item& entry)
     {
+		// adds a new node just after the head pointer.
+		// add this point the head 
 		head_ptr = new node<Item>(entry, head_ptr);
     }
 

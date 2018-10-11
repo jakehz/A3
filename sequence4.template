@@ -1,0 +1,61 @@
+#include <iostream>
+namespace CISP430_A3
+{
+	
+	template<class Item>
+	sequence<Item>::sequence() 
+	{
+		// initialize each pointer to NULL. The sequence contains nothing
+		// so we have each pointer pointing to nothing.
+		*head_ptr = NULL;
+		*tail_ptr = NULL;
+		*cursor = NULL;
+		*precursor = NULL;
+		// there are no nodes, therefore the node count is zero. 
+		many_nodes = 0;
+
+	}
+	
+	template <class Item>
+	sequence<Item>::sequence(const sequence<Item>& source)
+	{
+		//??? nothing mentioned about this function in the comments?
+		// guess i'll do this one later.
+	}
+
+	template <class Item>
+	sequence<Item>::~sequence()
+	{
+		// TODO 
+		// we'll save this for later since we need a populated linked list to delete each
+		// node.
+	}
+	
+	template <class Item>
+	void sequence<Item>::insert(const value_type& entry)
+	{
+		// if the head pointer is NULL, this means that there are no entries in the 
+		// linked list. therefore we add at the beginnning
+		if (head_ptr == NULL) {
+			// put the new node at the head of the linked list.
+			list_head_insert(head_ptr, entry);
+			// since it's the first and ONLY node, it is the first and last node.
+			// therefore we have the beginning and end pointers point to the same thing
+			tail_ptr = head_ptr;
+			// we make this the current item of the sequence by pointing the 
+			// cursor pointer at the node.
+			cursor = head_ptr;
+			// and we do nothing to the precursor, since there is nothing before this 
+			// pointer, it stays at null.
+		}
+		else if (cursor == head_ptr){
+			list_head_insert(head_ptr, entry);
+		}
+	}
+	template <class Item>
+	void sequence<Item>::attach(const value_type& entry) 
+	{
+
+	}
+
+}
