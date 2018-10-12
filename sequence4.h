@@ -92,22 +92,22 @@ namespace CISP430_A3
         void insert(const value_type& entry);
         void attach(const value_type& entry);
         void operator =(const sequence& source);
-	void remove_current( );
+		void remove_current( );
         // CONSTANT MEMBER FUNCTIONS
         size_type size( ) const { return many_nodes; }
         bool is_item( ) const { return (cursor != NULL); }
-        value_type current( ) const;
+		value_type current() const { return cursor->data(); }
     private:
-	// this always points to the first node of the list.
-	node<Item> *head_ptr;
-	// this always points to the last node of the list.
-	node<Item> *tail_ptr;
-	// where the sequence is currently pointing to; the current pointer
-	node<Item> *cursor;
-	// the node before the cursor.
-	node<Item> *precursor;
-	// the amount of nodes in the sequence.
-	size_type many_nodes;
+		// this always points to the first node of the list.
+		node<Item> *head_ptr;
+		// this always points to the last node of the list.
+		node<Item> *tail_ptr;
+		// where the sequence is currently pointing to; the current pointer
+		node<Item> *cursor;
+		// the node before the cursor.
+		node<Item> *precursor;
+		// the amount of nodes in the sequence.
+		size_type many_nodes;
     };
 }
 

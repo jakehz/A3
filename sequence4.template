@@ -7,10 +7,10 @@ namespace CISP430_A3
 	{
 		// initialize each pointer to NULL. The sequence contains nothing
 		// so we have each pointer pointing to nothing.
-		*head_ptr = NULL;
-		*tail_ptr = NULL;
-		*cursor = NULL;
-		*precursor = NULL;
+		head_ptr = NULL;
+		tail_ptr = NULL;
+		cursor = NULL;
+		precursor = NULL;
 		// there are no nodes, therefore the node count is zero. 
 		many_nodes = 0;
 
@@ -22,40 +22,71 @@ namespace CISP430_A3
 		//??? nothing mentioned about this function in the comments?
 		// guess i'll do this one later.
 	}
-
+	
 	template <class Item>
 	sequence<Item>::~sequence()
 	{
-		// TODO 
-		// we'll save this for later since we need a populated linked list to delete each
-		// node.
+			
 	}
 	
 	template <class Item>
+	void sequence<Item>::advance()
+	{
+		if (is_item()) {
+			// when we move one to the right, the precursor goes where to the cursor was, 
+			precursor = cursor;
+			// and the cursor goes just one after the precursor.
+			cursor = precursor->link();
+		}
+	}
+	
+	template <class Item>
+	void sequence<Item>::start()
+	{
+		// set the cursor to the very beginning at the head pointer
+		cursor = head_ptr;
+		// set the precursor to NULL, since there is nothing before the beginning
+		precursor = NULL;
+	}
+
+	template <class Item>
 	void sequence<Item>::insert(const value_type& entry)
 	{
-		// if the head pointer is NULL, this means that there are no entries in the 
-		// linked list. therefore we add at the beginnning
-		if (head_ptr == NULL) {
+		// check to see if the cursor is currently at the head pointer
+		// if it is, made a new node pointing to the head node
+		// and set it to the new node.
+		if (cursor == head_ptr) {
 			// put the new node at the head of the linked list.
 			list_head_insert(head_ptr, entry);
-			// since it's the first and ONLY node, it is the first and last node.
-			// therefore we have the beginning and end pointers point to the same thing
-			tail_ptr = head_ptr;
+			// if we have a situation where the tail pointer is null but the head pointer
+			// exists, it must be the only node in the list.
+			if (tail_ptr == NULL)
+			{
+				// since it's the first and ONLY node, it is the first and last node.
+				// therefore we have the beginning and end pointers point to the same thing
+				tail_ptr = head_ptr;
+			}
 			// we make this the current item of the sequence by pointing the 
 			// cursor pointer at the node.
 			cursor = head_ptr;
 			// and we do nothing to the precursor, since there is nothing before this 
 			// pointer, it stays at null.
 		}
-		else if (cursor == head_ptr){
-			list_head_insert(head_ptr, entry);
+		else {
+			// insert the node just after the precursor.
+			// this will give us a new node where the cursor used to be.
+			list_insert(precursor, entry);
+			// we then set the cursor to the node that the precursor points to. 
+			// this is the newly inserted node.
+			cursor = precursor->link();
+			
 		}
 	}
+	/*
 	template <class Item>
 	void sequence<Item>::attach(const value_type& entry) 
 	{
 
 	}
-
+	*/
 }
