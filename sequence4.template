@@ -52,41 +52,75 @@ namespace CISP430_A3
 	template <class Item>
 	void sequence<Item>::insert(const value_type& entry)
 	{
-		// check to see if the cursor is currently at the head pointer
-		// if it is, made a new node pointing to the head node
-		// and set it to the new node.
-		if (cursor == head_ptr) {
-			// put the new node at the head of the linked list.
+		// CASE 1 Empty Linked List
+		if (head_ptr == NULL && tail_ptr == NULL)
+		{
 			list_head_insert(head_ptr, entry);
-			// if we have a situation where the tail pointer is null but the head pointer
-			// exists, it must be the only node in the list.
-			if (tail_ptr == NULL)
-			{
-				// since it's the first and ONLY node, it is the first and last node.
-				// therefore we have the beginning and end pointers point to the same thing
-				tail_ptr = head_ptr;
-			}
-			// we make this the current item of the sequence by pointing the 
-			// cursor pointer at the node.
-			cursor = head_ptr;
-			// and we do nothing to the precursor, since there is nothing before this 
-			// pointer, it stays at null.
-		}
-		else {
-			// insert the node just after the precursor.
-			// this will give us a new node where the cursor used to be.
+			tail_ptr = head_ptr;
+			// point current pointer at the head pointer, and precursor to null
+			start();
+			// increment amount nodes.
+			many_nodes++;
+		} // CASE 2, insertion at head or insertion at NULL (End of list)
+		  // either way it is treated as if you inserted a value at the beginning of the list.
+		else if (cursor == head_ptr || cursor == NULL)
+		{
+			list_head_insert(head_ptr, entry);
+			// point current pointer at the head pointer, and precursor to null
+			start();
+			many_nodes++;
+		} 		
+		else // CASE 3 insertion anywhere in the list. 
+		{
+			// insert new node after the current precursor.
 			list_insert(precursor, entry);
-			// we then set the cursor to the node that the precursor points to. 
-			// this is the newly inserted node.
+			// set the cursor to point to the node pointed to 
+			// by the node pointed at by the precursor.
 			cursor = precursor->link();
-			
+			many_nodes++;
 		}
 	}
-	/*
-	template <class Item>
-	void sequence<Item>::attach(const value_type& entry) 
-	{
 
+	template <class Item>
+	void sequence<Item>::attach(const value_type& entry)
+	{
+		// CASE 1: the linked list is empty
+		if (head_ptr == NULL && tail_ptr == NULL)
+		{
+			// populate it with a node containing the entry.
+			list_head_insert(head_ptr, entry);
+			tail_ptr = head_ptr;
+			// point current pointer at the head pointer, and precursor to null
+			start();
+			// increment amount nodes.
+			many_nodes++;
+		} // CASE 2: Cursor is at the end or has gone beyond the end.
+		else if (cursor == tail_ptr || cursor == NULL)
+		{
+			// insert new node just after the tail pointer
+			list_insert(tail_ptr, entry);
+			// set the precursor to the current tail pointer (The second to last node in
+			// the sequence)
+			precursor = tail_ptr;
+			// set the tail pointer point to the new node, since it is the new node.
+			tail_ptr = tail_ptr->link();
+			// move the current pointer to the newly made end node.
+			cursor = tail_ptr;
+			//increment amount of nodes by 1. 
+			many_nodes++;
+		} // CASE 3: attaching to any node
+		else
+		{
+			// instead of using the precursor here, we use the cursor, since we want
+			// to insert a new node after the current node
+			list_insert(cursor, entry);
+			// set the precursor to the cursor, since the new cursor will pointed to the 
+			// one after it is currently pointed
+			precursor = cursor;
+			// then set the current to newly created node
+			cursor = cursor->link();
+			// increment the amount of nodes by 1
+			many_nodes++;
+		}
 	}
-	*/
 }
