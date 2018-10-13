@@ -19,16 +19,122 @@ namespace CISP430_A3
 	template <class Item>
 	sequence<Item>::sequence(const sequence<Item>& source)
 	{
-		//??? nothing mentioned about this function in the comments?
-		// guess i'll do this one later.
+		// this counts the index in the linked list that the cursor is at 
+		// in the source sequence.
+		size_type nodeIndex = 1;
+		// start at the beginning of the source linked list
+		node<Item>* currentNode = source.head_ptr;
+		// keep going until the current node is the cursor
+		while (currentNode != source.cursor )
+		{
+			currentNode = currentNode->link();
+			nodeIndex++;
+		}
+		// when finished we will have the index that the cursor is at.
+
+		// delcarations for temporary declarations of the linked list 
+		node<Item>* temp_head_ptr;
+		node<Item>* temp_tail_ptr;
+		// make a copy of each item in the source sequence to a new linked list and return
+		// the head and tail pointers of the new list to the temp variables
+		list_copy(source.head_ptr, temp_head_ptr, temp_tail_ptr);
+
+		// store the head and tail pointers for the newly created list. 
+		head_ptr = temp_head_ptr;
+		tail_ptr = temp_tail_ptr; 
+		// if the cursor is pointed at the first node, then the precursor must be NULL
+		if (nodeIndex == 1)
+		{
+			precursor = NULL;
+		}
+		else
+		{
+			// get the node pointer of the node just before the index 
+			precursor = list_locate(head_ptr, (nodeIndex - 1));
+		}
+		
+		if (head_ptr == NULL && tail_ptr == NULL)
+		{
+			// since the node count will return 0 regardless of whether the cursor is 
+			// pointed at the first node or at nothing, we check to see if the head and 
+			// tail pointers are NULL, indicating an empty list. 
+			// if they are, then the cursor points at nothing as well.
+			cursor = NULL;
+		}
+		else
+		{
+			// else the list is populated, and we located the cursor at the 
+			// index we found from the node count.
+			cursor = list_locate(head_ptr, nodeIndex);
+		}
+
+		// finally, we copy over the node count from the source list. 
+		many_nodes = source.many_nodes;
 	}
 	
-	template <class Item>
-	sequence<Item>::~sequence()
+	template <class Item> 
+	void sequence<Item>::operator =(const sequence<Item>& source)
 	{
-			
+		if (this == &source)
+		{
+			return;
+		}
+		// clear each node of the list.
+		list_clear(head_ptr);
+		// set the current pointers and all else to NULL
+		start();
+		// this counts the index in the linked list that the cursor is at 
+		// in the source sequence.
+		size_type nodeIndex = 1;
+		// start at the beginning of the source linked list
+		node<Item>* currentNode = source.head_ptr;
+		// keep going until the current node is the cursor
+		while (currentNode != source.cursor )
+		{
+			currentNode = currentNode->link();
+			nodeIndex++;
+		}
+		// when finished we will have the index that the cursor is at.
+
+		// delcarations for temporary declarations of the linked list 
+		node<Item>* temp_head_ptr;
+		node<Item>* temp_tail_ptr;
+		// make a copy of each item in the source sequence to a new linked list and return
+		// the head and tail pointers of the new list to the temp variables
+		list_copy(source.head_ptr, temp_head_ptr, temp_tail_ptr);
+
+		// store the head and tail pointers for the newly created list. 
+		head_ptr = temp_head_ptr;
+		tail_ptr = temp_tail_ptr; 
+		// if the cursor is pointed at the first node, then the precursor must be NULL
+		if (nodeIndex == 1)
+		{
+			precursor = NULL;
+		}
+		else
+		{
+			// get the node pointer of the node just before the index 
+			precursor = list_locate(head_ptr, (nodeIndex - 1));
+		}
+		
+		if (head_ptr == NULL && tail_ptr == NULL)
+		{
+			// since the node count will return 0 regardless of whether the cursor is 
+			// pointed at the first node or at nothing, we check to see if the head and 
+			// tail pointers are NULL, indicating an empty list. 
+			// if they are, then the cursor points at nothing as well.
+			cursor = NULL;
+		}
+		else
+		{
+			// else the list is populated, and we located the cursor at the 
+			// index we found from the node count.
+			cursor = list_locate(head_ptr, nodeIndex);
+		}
+
+		// finally, we copy over the node count from the source list. 
+		many_nodes = source.many_nodes;	
 	}
-	
 	template <class Item>
 	void sequence<Item>::advance()
 	{
@@ -91,7 +197,8 @@ namespace CISP430_A3
 			list_head_insert(head_ptr, entry);
 			tail_ptr = head_ptr;
 			// point current pointer at the head pointer, and precursor to null
-			start();
+			cursor = head_ptr;
+			precursor = NULL;
 			// increment amount nodes.
 			many_nodes++;
 		} // CASE 2: Cursor is at the end or has gone beyond the end.
@@ -122,5 +229,46 @@ namespace CISP430_A3
 			// increment the amount of nodes by 1
 			many_nodes++;
 		}
+	}
+	
+	template<class Item>
+	void sequence<Item>::remove_current()
+	{
+		if (is_item()) 
+		{	
+			if (head_ptr == tail_ptr)
+			{
+				list_head_remove(head_ptr);
+				head_ptr = NULL;
+				tail_ptr = NULL;
+				cursor = NULL;
+				precursor = NULL;
+			} 
+			else if (cursor == head_ptr)
+			{
+				list_head_remove(head_ptr);
+				cursor = head_ptr;
+			} 
+			else if (cursor == tail_ptr)
+			{
+				list_remove(precursor);
+				cursor = NULL;
+				tail_ptr = precursor;
+			} 
+			else
+			{
+				list_remove(precursor);
+				cursor = precursor->link();
+			}
+			many_nodes--;
+		}
+	}
+
+
+	template<class Item>
+	sequence<Item>::~sequence()
+	{
+		list_clear(head_ptr);
+		start();
 	}
 }
