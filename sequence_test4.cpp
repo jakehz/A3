@@ -26,7 +26,7 @@ double get_number( );
 
 int main( )
 {
-    sequence<double> test; // A sequence that we’ll perform tests on
+    sequence<double> test; // A sequence that weâ€™ll perform tests on
     char choice;   // A command character entered by the user
     
     cout << "I have initialized an empty sequence of real numbers." << endl;
@@ -114,6 +114,6 @@ double get_number( )
     
     cout << "Please enter a real number for the sequence: ";
     cin  >> result;
-    cout << result << " has been read." << endl;
+    clout << result << " has been read." << endl;
     return result;
 }
